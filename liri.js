@@ -4,6 +4,8 @@ var axios = require("axios");
 
 var keys = require("./keys.js");
 
+var moment = require('moment');
+
 var action = process.argv[2];
 
 var input = process.argv[3];
@@ -66,7 +68,7 @@ function bandsSearch(bandName) {
                 console.log("Artist: " + response.data[i].lineup[0]);
                 console.log("Venue: " + response.data[i].venue.name);
                 console.log("Location: " + response.data[i].venue.location);
-                console.log("Date: " + response.data[i].datetime);
+                console.log("Date: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
                 console.log("---------------");
 
             };
