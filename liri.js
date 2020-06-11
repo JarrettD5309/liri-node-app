@@ -1,10 +1,12 @@
-// require("dotenv").config();
+require("dotenv").config();
 
 var axios = require("axios");
 
 var keys = require("./keys.js");
 
 var moment = require('moment');
+
+var Spotify = require('node-spotify-api');
 
 var action = process.argv[2];
 
@@ -15,6 +17,7 @@ for (var i=4;i<process.argv.length;i++) {
 }
 
 function movieSearch (movieName) {
+
     if (movieName === undefined) {
         movieName = "Mr.+Nobody";
     }
@@ -24,7 +27,7 @@ function movieSearch (movieName) {
     axios.get(queryUrl).then(
         function(response) {
 
-            console.log("Title: " + response.data.Title);
+            console.log("\nTitle: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
             console.log("IMDB Rating: " + response.data.imdbRating);
             console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
@@ -65,7 +68,7 @@ function bandsSearch(bandName) {
 
             for (var i=0;i<response.data.length;i++) {
 
-                console.log("Artist: " + response.data[i].lineup[0]);
+                console.log("\nArtist: " + response.data[i].lineup[0]);
                 console.log("Venue: " + response.data[i].venue.name);
                 console.log("Location: " + response.data[i].venue.location);
                 console.log("Date: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
@@ -97,6 +100,27 @@ function bandsSearch(bandName) {
 
 }
 
+function spotifySearch(songName) {
+
+    var spotify = new Spotify({
+        id: keys.spotify.id,
+        secret: keys.spotify.secret
+      });
+       
+      spotify
+        .search({ type: 'track', query: songName })
+        .then(function(response) {
+          console.log(`\nArtist: ${response.tracks.items[0].album.artists[0].name}`);
+          console.log(`Song Title: ${response.tracks.items[0].name}`);
+          console.log(`Song Link: ${response.tracks.items[0].external_urls.spotify}`);
+          console.log(`Album Title: ${response.tracks.items[0].album.name}`);
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+
+}
+
 
 switch (action) {
     case "movie-this":
@@ -105,5 +129,9 @@ switch (action) {
 
     case "concert-this":
         bandsSearch(input);
+        break;
+
+    case "spotify-this-song":
+        spotifySearch(input);
         break;
 }
