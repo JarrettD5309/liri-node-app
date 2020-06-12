@@ -102,6 +102,10 @@ function bandsSearch(bandName) {
 
 function spotifySearch(songName) {
 
+    if (songName === undefined) {
+        songName = "The+Sign";
+    }
+
     var spotify = new Spotify({
         id: keys.spotify.id,
         secret: keys.spotify.secret
