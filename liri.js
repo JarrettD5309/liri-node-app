@@ -38,6 +38,24 @@ function movieSearch(movieName) {
             console.log("Plot: " + response.data.Plot);
             console.log("Cast: " + response.data.Actors);
 
+            var omdbTitle = `Title: ${response.data.Title}\r\n`;
+            var omdbYear = `Release Year: ${response.data.Year}\r\n`;
+            var omdbRating = `IMBD Rating: ${response.data.imdbRating}\r\n`;
+            var omdbRotten = `Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}\r\n`;
+            var omdbCountry = `Country: ${response.data.Country}\r\n`;
+            var omdbLanguage = `Language: ${response.data.Language}\r\n`;
+            var omdbPlot = `Plot: ${response.data.Plot}\r\n`;
+            var omdbCast = `Cast: ${response.data.Actors}\r\n`;
+
+            var omdbAction = `Command: ${action}\r\n`;
+
+            var omdbTime = `Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
+
+            var omdbText = omdbAction + omdbTitle + omdbYear + omdbRating + omdbRotten + omdbCountry + omdbLanguage + omdbPlot + omdbCast + omdbTime + "----------------\r\n";
+
+            logSearch(omdbText);
+
+
         })
         .catch(function (error) {
             if (error.response) {
@@ -128,21 +146,12 @@ function spotifySearch(songName) {
 
             var spotAction = `Command: ${action}\r\n`;
 
-            var text = spotAction + spotArtist + spotSong + spotLink + spotAlbum + "----------------\r\n";
+            var spotTime = `Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
 
-            fs.appendFile("log.txt", text, function(err) {
+            var spotText = spotAction + spotArtist + spotSong + spotLink + spotAlbum + spotTime + "----------------\r\n";
 
-                // If an error was experienced we will log it.
-                if (err) {
-                  console.log(err);
-                }
-              
-                // If no error is experienced, we'll log the phrase "Content Added" to our node console.
-                else {
-                  console.log("Command and Data Logged");
-                }
-              
-            });
+            logSearch(spotText);
+            
         })
         .catch(function (err) {
             console.log(err);
@@ -185,6 +194,22 @@ function randomSearch() {
                 break;
         }
     })
+}
+
+function logSearch (log) {
+    fs.appendFile("log.txt", log, function(err) {
+
+        // If an error was experienced we will log it.
+        if (err) {
+          console.log(err);
+        }
+      
+        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+        else {
+          console.log("Command and Data Logged");
+        }
+      
+    });
 }
 
 
