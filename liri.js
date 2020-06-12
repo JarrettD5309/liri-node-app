@@ -8,15 +8,17 @@ var moment = require('moment');
 
 var Spotify = require('node-spotify-api');
 
+var fs = require("fs");
+
 var action = process.argv[2];
 
 var input = process.argv[3];
 
-for (var i=4;i<process.argv.length;i++) {
+for (var i = 4; i < process.argv.length; i++) {
     input = input + "+" + process.argv[i];
 }
 
-function movieSearch (movieName) {
+function movieSearch(movieName) {
 
     if (movieName === undefined) {
         movieName = "Mr.+Nobody";
@@ -25,7 +27,7 @@ function movieSearch (movieName) {
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
     axios.get(queryUrl).then(
-        function(response) {
+        function (response) {
 
             console.log("\nTitle: " + response.data.Title);
             console.log("Release Year: " + response.data.Year);
@@ -37,7 +39,7 @@ function movieSearch (movieName) {
             console.log("Cast: " + response.data.Actors);
 
         })
-        .catch(function(error) {
+        .catch(function (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
@@ -56,7 +58,7 @@ function movieSearch (movieName) {
                 console.log("Error", error.message);
             }
             console.log(error.config);
-    });
+        });
 }
 
 function bandsSearch(bandName) {
@@ -64,9 +66,9 @@ function bandsSearch(bandName) {
     var queryUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
 
     axios.get(queryUrl).then(
-        function(response) {
+        function (response) {
 
-            for (var i=0;i<response.data.length;i++) {
+            for (var i = 0; i < response.data.length; i++) {
 
                 console.log("\nArtist: " + response.data[i].lineup[0]);
                 console.log("Venue: " + response.data[i].venue.name);
@@ -77,7 +79,7 @@ function bandsSearch(bandName) {
             };
 
         })
-        .catch(function(error) {
+        .catch(function (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
@@ -96,7 +98,7 @@ function bandsSearch(bandName) {
                 console.log("Error", error.message);
             }
             console.log(error.config);
-    });
+        });
 
 }
 
@@ -109,20 +111,57 @@ function spotifySearch(songName) {
     var spotify = new Spotify({
         id: keys.spotify.id,
         secret: keys.spotify.secret
-      });
-       
-      spotify
+    });
+
+    spotify
         .search({ type: 'track', query: songName })
-        .then(function(response) {
-          console.log(`\nArtist: ${response.tracks.items[0].album.artists[0].name}`);
-          console.log(`Song Title: ${response.tracks.items[0].name}`);
-          console.log(`Song Link: ${response.tracks.items[0].external_urls.spotify}`);
-          console.log(`Album Title: ${response.tracks.items[0].album.name}`);
+        .then(function (response) {
+            console.log(`\nArtist: ${response.tracks.items[0].album.artists[0].name}`);
+            console.log(`Song Title: ${response.tracks.items[0].name}`);
+            console.log(`Song Link: ${response.tracks.items[0].external_urls.spotify}`);
+            console.log(`Album Title: ${response.tracks.items[0].album.name}`);
         })
-        .catch(function(err) {
-          console.log(err);
+        .catch(function (err) {
+            console.log(err);
         });
 
+}
+
+function randomSearch() {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+
+        if (error) {
+            return console.log(error);
+        }
+
+        var randomArr = data.split(",");
+
+        action = randomArr[0];
+
+        var noQuotes = randomArr[1].replace(/"/g,'')
+
+        var noQuotesArr = noQuotes.split(" ");
+
+        input = noQuotesArr[0];
+
+        for (var i = 1; i < noQuotesArr.length; i++) {
+            input = input + "+" + noQuotesArr[i];
+        }
+
+        switch (action) {
+            case "movie-this":
+                movieSearch(input);
+                break;
+
+            case "concert-this":
+                bandsSearch(input);
+                break;
+
+            case "spotify-this-song":
+                spotifySearch(input);
+                break;
+        }
+    })
 }
 
 
@@ -137,5 +176,9 @@ switch (action) {
 
     case "spotify-this-song":
         spotifySearch(input);
+        break;
+
+    case "do-what-it-says":
+        randomSearch();
         break;
 }
