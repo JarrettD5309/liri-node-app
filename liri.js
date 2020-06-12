@@ -120,6 +120,29 @@ function spotifySearch(songName) {
             console.log(`Song Title: ${response.tracks.items[0].name}`);
             console.log(`Song Link: ${response.tracks.items[0].external_urls.spotify}`);
             console.log(`Album Title: ${response.tracks.items[0].album.name}`);
+
+            var spotArtist = `Artist: ${response.tracks.items[0].album.artists[0].name}\r\n`;
+            var spotSong = `Song Title: ${response.tracks.items[0].name}\r\n`;
+            var spotLink = `Song Link: ${response.tracks.items[0].external_urls.spotify}\r\n`;
+            var spotAlbum = `Album Title: ${response.tracks.items[0].album.name}\r\n`;
+
+            var spotAction = `Command: ${action}\r\n`;
+
+            var text = spotAction + spotArtist + spotSong + spotLink + spotAlbum + "----------------\r\n";
+
+            fs.appendFile("log.txt", text, function(err) {
+
+                // If an error was experienced we will log it.
+                if (err) {
+                  console.log(err);
+                }
+              
+                // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+                else {
+                  console.log("Command and Data Logged");
+                }
+              
+            });
         })
         .catch(function (err) {
             console.log(err);
