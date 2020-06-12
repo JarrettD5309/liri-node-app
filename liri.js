@@ -49,7 +49,7 @@ function movieSearch(movieName) {
 
             var omdbAction = `Command: ${action}\r\n`;
 
-            var omdbTime = `Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
+            var omdbTime = `Search Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
 
             var omdbText = omdbAction + omdbTitle + omdbYear + omdbRating + omdbRotten + omdbCountry + omdbLanguage + omdbPlot + omdbCast + omdbTime + "----------------\r\n";
 
@@ -86,15 +86,32 @@ function bandsSearch(bandName) {
     axios.get(queryUrl).then(
         function (response) {
 
+            var bitAction = `Command: ${action}\r\n\r\n`;
+
+            fs.appendFileSync("log.txt", bitAction);
+
             for (var i = 0; i < response.data.length; i++) {
 
                 console.log("\nArtist: " + response.data[i].lineup[0]);
                 console.log("Venue: " + response.data[i].venue.name);
                 console.log("Location: " + response.data[i].venue.location);
                 console.log("Date: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
-                console.log("---------------");
+                console.log("----------------");
 
+                var bitArtist = `Artist: ${response.data[i].lineup[0]}\r\n`;
+                var bitVenue = `Venue: ${response.data[i].venue.name}\r\n`;
+                var bitLocation = `Location: ${response.data[i].venue.location}\r\n`;
+                var bitDate = `Date: ${moment(response.data[i].datetime).format("MM/DD/YYYY")}\r\n`;
+
+                var bitText = bitArtist + bitVenue + bitLocation + bitDate + "~~~~~~~~~~~~~~~~\r\n";
+
+                fs.appendFileSync("log.txt", bitText);
+                
             };
+
+            var bitTime = `Search Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n----------------\r\n`;
+
+            fs.appendFileSync("log.txt", bitTime);
 
         })
         .catch(function (error) {
@@ -146,7 +163,7 @@ function spotifySearch(songName) {
 
             var spotAction = `Command: ${action}\r\n`;
 
-            var spotTime = `Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
+            var spotTime = `Search Time and Date: ${moment().format("dddd, MMMM Do YYYY, h:mm:ss a")}\r\n`;
 
             var spotText = spotAction + spotArtist + spotSong + spotLink + spotAlbum + spotTime + "----------------\r\n";
 
@@ -179,6 +196,8 @@ function randomSearch() {
         for (var i = 1; i < noQuotesArr.length; i++) {
             input = input + "+" + noQuotesArr[i];
         }
+
+        logSearch("Original Command: do-what-it-says\r\n");
 
         switch (action) {
             case "movie-this":
