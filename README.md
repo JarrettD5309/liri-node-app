@@ -61,5 +61,6 @@ $ node liri.js do-what-it-says
 ```
 
 ## GIF/Video Example
-* ![liri gif](liri-node.gif)
-* <https://drive.google.com/file/d/19QNJWasVDs9-Qgs-u-A3gAe2_Uk4ZILS/view?usp=sharing>
+![liri gif](https://media.giphy.com/media/H42tIKHYBYY6FX6GJb/giphy.gif)
+
+full video example - <https://drive.google.com/file/d/19QNJWasVDs9-Qgs-u-A3gAe2_Uk4ZILS/view?usp=sharing>
