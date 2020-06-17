@@ -1,5 +1,4 @@
 # Liri Node App
-<https://jarrettd5309.github.io/liri-node-app/> \
 <https://github.com/JarrettD5309/liri-node-app> \
 Version 1.0 \
 Original Deployment Date - June 17, 2020\
