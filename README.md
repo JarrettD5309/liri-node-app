@@ -60,5 +60,6 @@ $ node liri.js movie-this 12 monkeys
 $ node liri.js do-what-it-says
 ```
 
-## Video Example
+## GIF/Video Example
+* ![](liri-node.gif)
 * <https://drive.google.com/file/d/19QNJWasVDs9-Qgs-u-A3gAe2_Uk4ZILS/view?usp=sharing>
